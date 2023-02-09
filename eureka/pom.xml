@@ -12,7 +12,7 @@
 	<artifactId>eureka</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>eureka</name>
-	<description>Flight Booking System Eureka Server</description>
+	<description>Flight Booking System Eureka Service</description>
 	<properties>
 		<java.version>11</java.version>
 		<spring-cloud.version>2021.0.5</spring-cloud.version>

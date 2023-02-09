@@ -12,7 +12,7 @@
 	<artifactId>config</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>config</name>
-	<description>Flight Booking System Config Server</description>
+	<description>Flight Booking System Config Service</description>
 	<properties>
 		<java.version>11</java.version>
 		<spring-cloud.version>2021.0.5</spring-cloud.version>
