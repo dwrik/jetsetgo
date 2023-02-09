@@ -61,12 +61,12 @@ public class AuthFilter implements GatewayFilter {
 
     private void populateRequestWithHeaders(ServerWebExchange exchange, final String token) {
         Claims claims = jwtUtil.getAllClaims(token);
-        String username = claims.get("username", String.class);
         String userId = claims.get("userId", Integer.class).toString();
+        String email = claims.get("email", String.class);
         exchange.getRequest()
                 .mutate()
                 .header("userId", userId)
-                .header("username", username)
+                .header("email", email)
                 .build();
     }
 

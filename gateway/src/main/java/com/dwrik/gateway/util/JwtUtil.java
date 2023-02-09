@@ -1,7 +1,6 @@
 package com.dwrik.gateway.util;
 
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
@@ -27,11 +26,11 @@ public class JwtUtil {
         signingKey = Keys.hmacShaKeyFor(secret.getBytes());
     }
 
-    public String generateToken(Integer id, String username) {
+    public String generateToken(Integer id, String email) {
         long issuedAt = System.currentTimeMillis();
         long expiration = issuedAt + (tokenValidity * 1000);
         return Jwts.builder()
-                .setClaims(Map.of("userId", id, "username", username))
+                .setClaims(Map.of("userId", id, "email", email))
                 .setIssuedAt(new Date(issuedAt))
                 .setExpiration(new Date(expiration))
                 .signWith(signingKey)
