@@ -1,39 +1,51 @@
 package com.dwrik.auth.controller;
 
+import com.dwrik.auth.dto.UserDto;
+import com.dwrik.auth.model.User;
+import com.dwrik.auth.service.UserService;
 import com.dwrik.auth.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
 import java.util.Map;
 
 @RestController
 public class AuthController {
 
-    @Autowired
-    private JwtUtil jwtUtil;
+	@Autowired
+	private JwtUtil jwtUtil;
 
-    @PostMapping("/login")
-    public Map<String, String> login() {
-        // TODO: implement custom UserDetailsService for loading users by email/username
-        // TODO: use spring security's authentication manager for authenticating if possible
-        return null;
-    }
+	@Autowired
+	private UserService userService;
 
-    @PostMapping("/register")
-    public Map<String, String> register() {
-        // TODO: create UserDTO object (currently User model)
-        // TODO: add validation annotations like @NotNull, @NotEmpty
+	@PostMapping("/login")
+	public Map<String, String> login(@Valid @RequestBody UserDto userDto) {
+		User user = userService.login(userDto);
 
-        // TODO: add @Valid annotation on @RequestBody of post mapping
+		String id = user.getId().toString();
+		String email = user.getEmail();
+		String authToken = jwtUtil.generateToken(user.getId(), user.getEmail());
 
-        // TODO: handle validation exceptions in ControllerAdvice
+		return Map.of(
+				"id", id,
+				"email", email,
+				"token", authToken
+		);
+	}
 
-        // TODO: implement IUserService a.k.a interface for the UserService (register, emailExists)
-        // TODO: implement UserService for all service methods
-        // TODO: use custom exceptions if possible
+	@PostMapping("/register")
+	public Map<String, String> register(@Valid @RequestBody UserDto userDto) {
+		User user = userService.registerNewUser(userDto);
 
-        return null;
-    }
+		String id = user.getId().toString();
+		String email = user.getEmail();
 
+		return Map.of(
+				"id", id,
+				"email", email
+		);
+	}
 }
