@@ -3,8 +3,3 @@ spring:
     name: auth
   config:
     import: "configserver:"
-
-jwt:
-  secret: ${JWT_SECRET}
-  token:
-    validity: ${JWT_TOKEN_VALIDITY}
