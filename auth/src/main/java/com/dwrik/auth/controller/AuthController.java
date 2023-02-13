@@ -5,8 +5,10 @@ import com.dwrik.auth.model.User;
 import com.dwrik.auth.service.UserService;
 import com.dwrik.auth.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
@@ -22,6 +24,7 @@ public class AuthController {
 	private UserService userService;
 
 	@PostMapping("/login")
+	@ResponseStatus(HttpStatus.ACCEPTED)
 	public Map<String, String> login(@Valid @RequestBody UserDto userDto) {
 		User user = userService.login(userDto);
 
@@ -37,6 +40,7 @@ public class AuthController {
 	}
 
 	@PostMapping("/register")
+	@ResponseStatus(HttpStatus.CREATED)
 	public Map<String, String> register(@Valid @RequestBody UserDto userDto) {
 		User user = userService.registerNewUser(userDto);
 
