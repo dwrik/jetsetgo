@@ -14,5 +14,6 @@
         <module>eureka</module>
         <module>gateway</module>
         <module>auth</module>
+        <module>flight</module>
     </modules>
 </project>
