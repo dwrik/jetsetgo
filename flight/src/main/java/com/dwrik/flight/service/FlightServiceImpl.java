@@ -8,13 +8,12 @@ import org.springframework.stereotype.Service;
 import java.util.Date;
 
 @Service
-public class FlightService {
+public class FlightServiceImpl implements FlightService {
 
 	@Autowired
 	private FlightRepository flightRepository;
 
 	public Iterable<Flight> getAllFlights() {
-		// create flight service like user service
 		return flightRepository.findAll();
 	}
 
