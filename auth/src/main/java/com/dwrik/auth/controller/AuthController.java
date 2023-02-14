@@ -2,7 +2,7 @@ package com.dwrik.auth.controller;
 
 import com.dwrik.auth.dto.UserDto;
 import com.dwrik.auth.model.User;
-import com.dwrik.auth.service.UserServiceImpl;
+import com.dwrik.auth.service.UserService;
 import com.dwrik.auth.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,12 +21,12 @@ public class AuthController {
 	private JwtUtil jwtUtil;
 
 	@Autowired
-	private UserServiceImpl userServiceImpl;
+	private UserService userService;
 
 	@PostMapping("/login")
 	@ResponseStatus(HttpStatus.ACCEPTED)
 	public Map<String, String> login(@Valid @RequestBody UserDto userDto) {
-		User user = userServiceImpl.login(userDto);
+		User user = userService.login(userDto);
 
 		String id = user.getId().toString();
 		String email = user.getEmail();
@@ -42,7 +42,7 @@ public class AuthController {
 	@PostMapping("/register")
 	@ResponseStatus(HttpStatus.CREATED)
 	public Map<String, String> register(@Valid @RequestBody UserDto userDto) {
-		User user = userServiceImpl.registerNewUser(userDto);
+		User user = userService.registerNewUser(userDto);
 
 		String id = user.getId().toString();
 		String email = user.getEmail();
