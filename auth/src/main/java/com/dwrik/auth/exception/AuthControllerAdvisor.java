@@ -3,18 +3,16 @@ package com.dwrik.auth.exception;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.util.HashMap;
 import java.util.Map;
 
-@ControllerAdvice
-public class ControllerAdvisor {
+@RestControllerAdvice
+public class AuthControllerAdvisor {
 
-	@ResponseBody
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	@ExceptionHandler(MethodArgumentNotValidException.class)
 	Map<String, Object> handleDtoExceptions(MethodArgumentNotValidException e) {
@@ -25,7 +23,6 @@ public class ControllerAdvisor {
 		return Map.of("error", map);
 	}
 
-	@ResponseBody
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	@ExceptionHandler({UserAlreadyExistsException.class, InvalidCredentialsException.class})
 	Map<String, String> handleUserExceptions(RuntimeException exception) {
