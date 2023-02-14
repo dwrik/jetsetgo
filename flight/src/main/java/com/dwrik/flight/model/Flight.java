@@ -38,18 +38,24 @@ public class Flight {
 	@NotNull
 	@Max(value = 150, message = "a flight cannot have more than 150 seats")
 	@Min(value = 0, message = "a flight cannot have negative remaining seats")
+	private Integer totalSeats;
+
+	@NotNull
+	@Max(value = 150, message = "a flight cannot have more than 150 seats")
+	@Min(value = 0, message = "a flight cannot have negative remaining seats")
 	private Integer remainingSeats;
 
 	public Flight() {
 	}
 
-	public Flight(Long id, String number, String source, String destination, Date date, Integer fare, Integer remainingSeats) {
+	public Flight(Long id, String number, String source, String destination, Date date, Integer fare, Integer totalSeats, Integer remainingSeats) {
 		this.id = id;
 		this.number = number;
 		this.source = source;
 		this.destination = destination;
 		this.date = date;
 		this.fare = fare;
+		this.totalSeats = totalSeats;
 		this.remainingSeats = remainingSeats;
 	}
 
@@ -101,11 +107,19 @@ public class Flight {
 		this.fare = fare;
 	}
 
-	public int getRemainingSeats() {
+	public Integer getTotalSeats() {
+		return totalSeats;
+	}
+
+	public void setTotalSeats(Integer totalSeats) {
+		this.totalSeats = totalSeats;
+	}
+
+	public Integer getRemainingSeats() {
 		return remainingSeats;
 	}
 
-	public void setRemainingSeats(int remainingSeats) {
+	public void setRemainingSeats(Integer remainingSeats) {
 		this.remainingSeats = remainingSeats;
 	}
 }
