@@ -35,10 +35,10 @@ public class FlightController {
 	@PatchMapping("/{id}/reserve")
 	@ResponseStatus(HttpStatus.ACCEPTED)
 	public Map<String, Object> reserveSeat(@PathVariable Long id) {
-		int seatNumber = flightService.reserveSeat(id);
+		Integer totalSeats = flightService.reserveSeat(id);
 		return Map.of(
 				"status", "successful",
-				"seatNumber", seatNumber
+				"totalSeats", totalSeats
 		);
 	}
 }
