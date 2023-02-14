@@ -14,6 +14,7 @@ public class FlightService {
 	private FlightRepository flightRepository;
 
 	public Iterable<Flight> getAllFlights() {
+		// create flight service like user service
 		return flightRepository.findAll();
 	}
 
