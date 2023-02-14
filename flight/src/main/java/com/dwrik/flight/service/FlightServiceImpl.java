@@ -33,10 +33,22 @@ public class FlightServiceImpl implements FlightService {
 		}
 
 		Flight flight = result.get();
-		int seatNumber = flight.getRemainingSeats();
-		flight.setRemainingSeats(seatNumber - 1);
+		flight.setRemainingSeats(flight.getRemainingSeats() - 1);
 		flightRepository.save(flight);
 
-		return seatNumber;
+		return flight.getTotalSeats();
+	}
+
+	@Transactional
+	public void vacateSeat(Long id) {
+		Optional<Flight> result = flightRepository.findById(id);
+
+		if (result.isEmpty()) {
+			throw new UnknownFlightException("no such flight exists");
+		}
+
+		Flight flight = result.get();
+		flight.setRemainingSeats(flight.getRemainingSeats() + 1);
+		flightRepository.save(flight);
 	}
 }
