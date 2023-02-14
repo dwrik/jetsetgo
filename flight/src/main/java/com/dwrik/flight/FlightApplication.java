@@ -28,29 +28,24 @@ public class FlightApplication implements CommandLineRunner {
 	public void run(String... args) {
 		Calendar calendar = Calendar.getInstance();
 
+		calendar.set(Calendar.MONTH, 3);
+		calendar.set(Calendar.DAY_OF_MONTH, 15);
 		calendar.set(Calendar.HOUR_OF_DAY, 0);
 		calendar.set(Calendar.MINUTE, 0);
 		calendar.set(Calendar.SECOND, 0);
 
 		Date currentDay = calendar.getTime();
-
 		calendar.add(Calendar.DAY_OF_MONTH, 2);
 		Date twoDaysAhead = calendar.getTime();
-
 		calendar.add(Calendar.DAY_OF_MONTH, 3);
 		Date threeDaysAhead = calendar.getTime();
 
-//		Date twoDaysAhead = new Date(currentDay.getTime() + 2 * 24 * 3600 * 1000L);
-//		Date threeDaysAhead = new Date(currentDay.getTime() + 3 * 24 * 3600 * 1000L);
-
-		flightRepository.deleteAll();
-
 		flightRepository.saveAll(List.of(
-				new Flight("FN101", "BOM", "KOL", currentDay, 6500, 5),
-				new Flight("FN103", "HYD", "DUR", threeDaysAhead, 5500, 5),
-				new Flight("FN104", "HYD", "KOL", twoDaysAhead, 8000, 5),
-				new Flight("FN105", "PUN", "DEL", twoDaysAhead, 10000, 5),
-				new Flight("FN102", "DEL", "BOM", currentDay, 9500, 5)
+				new Flight(1L, "FN101", "BOM", "KOL", currentDay, 6500, 5),
+				new Flight(2L, "FN103", "HYD", "DUR", threeDaysAhead, 5500, 0),
+				new Flight(3L, "FN104", "HYD", "KOL", twoDaysAhead, 8000, 5),
+				new Flight(4L, "FN105", "PUN", "DEL", twoDaysAhead, 10000, 5),
+				new Flight(5L, "FN102", "DEL", "BOM", currentDay, 9500, 5)
 		));
 	}
 }
