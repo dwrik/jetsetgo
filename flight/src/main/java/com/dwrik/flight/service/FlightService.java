@@ -11,4 +11,6 @@ public interface FlightService {
 	Iterable<Flight> getFlightsUsingSourceAndDestinationAndDate(String source, String destination, Date date);
 
 	Integer reserveSeat(Long id);
+
+	void vacateSeat(Long id);
 }
