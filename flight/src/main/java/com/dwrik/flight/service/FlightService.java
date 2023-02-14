@@ -9,4 +9,6 @@ public interface FlightService {
 	Iterable<Flight> getAllFlights();
 
 	Iterable<Flight> getFlightsUsingSourceAndDestinationAndDate(String source, String destination, Date date);
+
+	Integer reserveSeat(Long id);
 }
