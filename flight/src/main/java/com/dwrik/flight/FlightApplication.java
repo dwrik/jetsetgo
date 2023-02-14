@@ -41,11 +41,11 @@ public class FlightApplication implements CommandLineRunner {
 		Date threeDaysAhead = calendar.getTime();
 
 		flightRepository.saveAll(List.of(
-				new Flight(1L, "FN101", "BOM", "KOL", currentDay, 6500, 5),
-				new Flight(2L, "FN103", "HYD", "DUR", threeDaysAhead, 5500, 0),
-				new Flight(3L, "FN104", "HYD", "KOL", twoDaysAhead, 8000, 5),
-				new Flight(4L, "FN105", "PUN", "DEL", twoDaysAhead, 10000, 5),
-				new Flight(5L, "FN102", "DEL", "BOM", currentDay, 9500, 5)
+				new Flight(1L, "FN101", "BOM", "KOL", currentDay, 6500, 5, 5),
+				new Flight(2L, "FN103", "HYD", "DUR", threeDaysAhead, 5500, 5, 0),
+				new Flight(3L, "FN104", "HYD", "KOL", twoDaysAhead, 8000, 5, 5),
+				new Flight(4L, "FN105", "PUN", "DEL", twoDaysAhead, 10000, 5, 5),
+				new Flight(5L, "FN102", "DEL", "BOM", currentDay, 9500, 5, 5)
 		));
 	}
 }
