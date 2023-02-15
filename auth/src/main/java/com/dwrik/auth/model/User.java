@@ -4,6 +4,9 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 @Entity(name = "users")
 public class User {
@@ -11,7 +14,13 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
+    @NotNull
+    @Email(message = "invalid email address")
     private String email;
+
+    @NotNull
+    @Size(min = 8, max = 15, message = "password should be between 8 and 15 characters long")
     private String password;
 
     public User() {
