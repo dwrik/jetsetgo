@@ -18,69 +18,71 @@ import java.util.function.Predicate;
 @Component
 public class AuthFilter implements GatewayFilter {
 
-    @Autowired
-    private JwtUtil jwtUtil;
+	// list of secured endpoints
+	private final List<String> securedEndpoints = List.of(
+			"/reserve",
+			"/booking",
+			"/checkin"
+	);
 
-    // list of secured endpoints
-    final private List<String> securedEndpoints = List.of(
-            "/booking",
-            "/checkin"
-    );
+	// predicate for validating routes
+	private final Predicate<ServerHttpRequest> isSecuredEndpoint =
+			request -> securedEndpoints.stream().anyMatch(path -> request.getURI().getPath().contains(path));
 
-    // predicate for validating routes
-    private final Predicate<ServerHttpRequest> isSecuredEndpoint =
-            request -> securedEndpoints.stream().anyMatch(path -> request.getURI().getPath().startsWith(path));
+	@Autowired
+	private JwtUtil jwtUtil;
 
-    @Override
-    public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
-        // get request
-        ServerHttpRequest request = exchange.getRequest();
+	@Override
+	public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
+		// get request
+		ServerHttpRequest request = exchange.getRequest();
 
-        // check if secured endpoint
-        if (isSecuredEndpoint.test(request)) {
-            // check if auth header missing
-            if (isAuthHeaderMissing(request)) {
-                return onError(exchange, HttpStatus.UNAUTHORIZED);
-            }
+		// check if secured endpoint
+		if (isSecuredEndpoint.test(request)) {
+			// check if auth header missing
+			if (isAuthHeaderMissing(request)) {
+				return onError(exchange, HttpStatus.UNAUTHORIZED);
+			}
 
-            // get auth token from header
-            final String token = getAuthToken(request);
+			// get auth token from header
+			final String token = getAuthToken(request);
 
-            // check if auth token valid
-            if (jwtUtil.isTokenInvalid(token)) {
-                return onError(exchange, HttpStatus.BAD_REQUEST);
-            }
+			// check if auth token valid
+			if (jwtUtil.isTokenInvalid(token)) {
+				return onError(exchange, HttpStatus.BAD_REQUEST);
+			}
 
-            // extract claims from token and add to headers
-            populateRequestWithHeaders(exchange, token);
-        }
+			// extract claims from token and add to headers
+			populateRequestWithHeaders(exchange, token);
+		}
 
-        // forward request to next filter in chain
-        return chain.filter(exchange);
-    }
+		// forward request to next filter in chain
+		return chain.filter(exchange);
+	}
 
-    private void populateRequestWithHeaders(ServerWebExchange exchange, final String token) {
-        Claims claims = jwtUtil.getAllClaims(token);
-        String userId = claims.get("userId", Integer.class).toString();
-        String email = claims.get("email", String.class);
-        exchange.getRequest()
-                .mutate()
-                .header("userId", userId)
-                .header("email", email)
-                .build();
-    }
+	private void populateRequestWithHeaders(ServerWebExchange exchange, final String token) {
+		Claims claims = jwtUtil.getAllClaims(token);
+		String userId = claims.get("userId", Integer.class).toString();
+		String email = claims.get("email", String.class);
+		exchange.getRequest()
+				.mutate()
+				.header("userId", userId)
+				.header("email", email)
+				.build();
+	}
 
-    private Mono<Void> onError(ServerWebExchange exchange, HttpStatus statusCode) {
-        ServerHttpResponse response = exchange.getResponse();
-        response.setStatusCode(statusCode);
-        return response.setComplete();
-    }
+	private Mono<Void> onError(ServerWebExchange exchange, HttpStatus statusCode) {
+		ServerHttpResponse response = exchange.getResponse();
+		response.setStatusCode(statusCode);
+		return response.setComplete();
+	}
 
-    private boolean isAuthHeaderMissing(ServerHttpRequest request) {
-        return request.getHeaders().containsKey("Authorization");
-    }
+	private boolean isAuthHeaderMissing(ServerHttpRequest request) {
+		return !request.getHeaders().containsKey("Authorization")
+				|| !(request.getHeaders().get("Authorization").get(0).length() > 7);
+	}
 
-    private String getAuthToken(ServerHttpRequest request) {
-        return request.getHeaders().getOrEmpty("Authorization").get(0);
-    }
+	private String getAuthToken(ServerHttpRequest request) {
+		return request.getHeaders().getOrEmpty("Authorization").get(0).substring(7);
+	}
 }
