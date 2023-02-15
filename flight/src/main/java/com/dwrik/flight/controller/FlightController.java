@@ -17,13 +17,19 @@ public class FlightController {
 	private FlightService flightService;
 
 	@GetMapping("/")
-	@ResponseStatus(HttpStatus.ACCEPTED)
+	@ResponseStatus(HttpStatus.OK)
 	public Iterable<Flight> getAll() {
 		return flightService.getAllFlights();
 	}
 
+	@GetMapping("/{id}")
+	@ResponseStatus(HttpStatus.OK)
+	public Flight getOne(@PathVariable Long id) {
+		return flightService.getFlightById(id);
+	}
+
 	@GetMapping("/{from}/{to}/{date}")
-	@ResponseStatus(HttpStatus.ACCEPTED)
+	@ResponseStatus(HttpStatus.OK)
 	public Iterable<Flight> getUsingFromToAndDate(
 			@PathVariable(value = "from") String source,
 			@PathVariable(value = "to") String destination,
@@ -33,12 +39,12 @@ public class FlightController {
 	}
 
 	@PatchMapping("/{id}/reserve")
-	@ResponseStatus(HttpStatus.ACCEPTED)
+	@ResponseStatus(HttpStatus.OK)
 	public Map<String, Object> reserveSeat(@PathVariable Long id) {
-		Integer totalSeats = flightService.reserveSeat(id);
+		flightService.reserveSeat(id);
 		return Map.of(
-				"status", "successful",
-				"totalSeats", totalSeats
+				"status", HttpStatus.OK.value(),
+				"message", "seat reserved successfully"
 		);
 	}
 }
