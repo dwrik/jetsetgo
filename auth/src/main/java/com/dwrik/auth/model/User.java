@@ -20,10 +20,15 @@ public class User {
     private String email;
 
     @NotNull
-    @Size(min = 8, max = 15, message = "password should be between 8 and 15 characters long")
     private String password;
 
     public User() {
+    }
+
+    public User(Integer id, String email, String password) {
+        this.id = id;
+        this.email = email;
+        this.password = password;
     }
 
     public Integer getId() {
