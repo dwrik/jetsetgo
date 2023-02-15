@@ -16,10 +16,12 @@ public class FlightServiceImpl implements FlightService {
 	@Autowired
 	private FlightRepository flightRepository;
 
+	@Override
 	public Iterable<Flight> getAllFlights() {
 		return flightRepository.findAll();
 	}
 
+	@Override
 	public Flight getFlightById(Long id) {
 		Optional<Flight> result = flightRepository.findById(id);
 
@@ -30,10 +32,12 @@ public class FlightServiceImpl implements FlightService {
 		return result.get();
 	}
 
+	@Override
 	public Iterable<Flight> getFlightsUsingSourceAndDestinationAndDate(String source, String destination, Date date) {
 		return flightRepository.findBySourceAndDestinationAndDate(source, destination, date);
 	}
 
+	@Override
 	@Transactional
 	public void reserveSeat(Long id) {
 		Optional<Flight> result = flightRepository.findById(id);
@@ -47,6 +51,7 @@ public class FlightServiceImpl implements FlightService {
 		flightRepository.save(flight);
 	}
 
+	@Override
 	@Transactional
 	public void vacateSeat(Long id) {
 		Optional<Flight> result = flightRepository.findById(id);
