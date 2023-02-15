@@ -26,7 +26,7 @@ public class FlightServiceImpl implements FlightService {
 		Optional<Flight> result = flightRepository.findById(id);
 
 		if (result.isEmpty()) {
-			throw new UnknownFlightException("no such flight exists");
+			throw new UnknownFlightException("flight not found");
 		}
 
 		return result.get();
@@ -43,7 +43,7 @@ public class FlightServiceImpl implements FlightService {
 		Optional<Flight> result = flightRepository.findById(id);
 
 		if (result.isEmpty()) {
-			throw new UnknownFlightException("no such flight exists");
+			throw new UnknownFlightException("flight not found");
 		}
 
 		Flight flight = result.get();
@@ -57,7 +57,7 @@ public class FlightServiceImpl implements FlightService {
 		Optional<Flight> result = flightRepository.findById(id);
 
 		if (result.isEmpty()) {
-			throw new UnknownFlightException("no such flight exists");
+			throw new UnknownFlightException("flight not found");
 		}
 
 		Flight flight = result.get();
