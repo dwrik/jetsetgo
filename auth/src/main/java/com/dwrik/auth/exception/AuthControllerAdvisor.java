@@ -15,7 +15,7 @@ public class AuthControllerAdvisor {
 
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	@ExceptionHandler(MethodArgumentNotValidException.class)
-	Map<String, Object> handleDtoExceptions(MethodArgumentNotValidException e) {
+	public Map<String, Object> handleDtoExceptions(MethodArgumentNotValidException e) {
 		Map<String, String> map = new HashMap<>();
 		for (FieldError error : e.getBindingResult().getFieldErrors()) {
 			map.put(error.getField(), error.getDefaultMessage());
@@ -25,7 +25,7 @@ public class AuthControllerAdvisor {
 
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	@ExceptionHandler({UserAlreadyExistsException.class, InvalidCredentialsException.class})
-	Map<String, String> handleUserExceptions(RuntimeException exception) {
+	public Map<String, String> handleUserExceptions(RuntimeException exception) {
 		return Map.of("error", exception.getMessage());
 	}
 }
