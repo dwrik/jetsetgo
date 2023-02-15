@@ -1,10 +1,7 @@
 package com.dwrik.flight.model;
 
 import javax.persistence.*;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 import java.util.Date;
 
 @Entity(name = "flights")
@@ -27,6 +24,7 @@ public class Flight {
 	private String destination;
 
 	@NotNull
+	@FutureOrPresent
 	@Temporal(TemporalType.DATE)
 	private Date date;
 
