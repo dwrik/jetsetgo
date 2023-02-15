@@ -20,12 +20,22 @@ public class FlightServiceImpl implements FlightService {
 		return flightRepository.findAll();
 	}
 
+	public Flight getFlightById(Long id) {
+		Optional<Flight> result = flightRepository.findById(id);
+
+		if (result.isEmpty()) {
+			throw new UnknownFlightException("no such flight exists");
+		}
+
+		return result.get();
+	}
+
 	public Iterable<Flight> getFlightsUsingSourceAndDestinationAndDate(String source, String destination, Date date) {
 		return flightRepository.findBySourceAndDestinationAndDate(source, destination, date);
 	}
 
 	@Transactional
-	public Integer reserveSeat(Long id) {
+	public void reserveSeat(Long id) {
 		Optional<Flight> result = flightRepository.findById(id);
 
 		if (result.isEmpty()) {
@@ -35,8 +45,6 @@ public class FlightServiceImpl implements FlightService {
 		Flight flight = result.get();
 		flight.setRemainingSeats(flight.getRemainingSeats() - 1);
 		flightRepository.save(flight);
-
-		return flight.getTotalSeats();
 	}
 
 	@Transactional
