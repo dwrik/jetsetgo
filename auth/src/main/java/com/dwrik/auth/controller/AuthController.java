@@ -24,7 +24,7 @@ public class AuthController {
 	private UserService userService;
 
 	@PostMapping("/login")
-	@ResponseStatus(HttpStatus.ACCEPTED)
+	@ResponseStatus(HttpStatus.OK)
 	public Map<String, String> login(@Valid @RequestBody UserDto userDto) {
 		User user = userService.login(userDto);
 
