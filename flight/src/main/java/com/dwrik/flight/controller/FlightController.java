@@ -33,13 +33,13 @@ public class FlightController {
 	public Iterable<Flight> getUsingFromToAndDate(
 			@PathVariable(value = "from") String source,
 			@PathVariable(value = "to") String destination,
-			@PathVariable @DateTimeFormat(pattern = "dd-MM-yyyy") Date date
+			@PathVariable @DateTimeFormat(pattern = "yyyy-MM-dd") Date date
 	) {
 		return flightService.getFlightsUsingSourceAndDestinationAndDate(source, destination, date);
 	}
 
-	@PatchMapping("/{id}/reserve")
-	@ResponseStatus(HttpStatus.OK)
+	@PostMapping("/{id}/reserve")
+	@ResponseStatus(HttpStatus.CREATED)
 	public Map<String, Object> reserveSeat(@PathVariable Long id) {
 		flightService.reserveSeat(id);
 		return Map.of(
