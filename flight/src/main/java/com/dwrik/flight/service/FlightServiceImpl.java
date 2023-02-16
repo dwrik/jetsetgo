@@ -4,7 +4,6 @@ import com.dwrik.flight.exception.UnknownFlightException;
 import com.dwrik.flight.model.Flight;
 import com.dwrik.flight.repository.FlightRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
