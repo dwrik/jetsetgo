@@ -1,13 +1,14 @@
 package com.dwrik.booking.service;
 
 import com.dwrik.booking.dto.BookingDto;
+import com.dwrik.booking.dto.FlightDto;
 import com.dwrik.booking.exception.UnableToCreateBookingException;
 import com.dwrik.booking.exception.UnknownBookingException;
-import com.dwrik.booking.feignclients.FlightClient;
+import com.dwrik.booking.feignclient.FlightClient;
 import com.dwrik.booking.model.Booking;
 import com.dwrik.booking.repository.BookingRepository;
-import feign.FeignException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
@@ -18,6 +19,9 @@ public class BookingServiceImpl implements BookingService {
 
 	@Autowired
 	private FlightClient flightClient;
+
+	@Autowired
+	private StreamBridge streamBridge;
 
 	@Autowired
 	private BookingRepository bookingRepository;
@@ -39,14 +43,8 @@ public class BookingServiceImpl implements BookingService {
 			throw new UnableToCreateBookingException("booking already exists");
 		}
 
-		try {
-			Map<String, Object> response = flightClient.reserveSeat(
-					Map.of("Authorization", bearerToken),
-					bookingDto.getFlightId()
-			);
-		} catch (FeignException e) {
-			throw new UnableToCreateBookingException("failed to create booking");
-		}
+		Map<String, Object> headerMap = Map.of("Authorization", bearerToken);
+		FlightDto flightDto = flightClient.reserveSeat(headerMap, bookingDto.getFlightId());
 
 		Booking booking = new Booking();
 
@@ -54,15 +52,15 @@ public class BookingServiceImpl implements BookingService {
 		booking.setFlightId(bookingDto.getFlightId());
 		booking.setFirstName(bookingDto.getFirstName());
 		booking.setLastName(bookingDto.getLastName());
-		booking.setFlightNumber(bookingDto.getFlightNumber());
-		booking.setSource(bookingDto.getSource());
-		booking.setDestination(bookingDto.getDestination());
-		booking.setDate(bookingDto.getDate());
-		booking.setFare(bookingDto.getFare());
+		booking.setFlightNumber(flightDto.getFlightNumber());
+		booking.setSource(flightDto.getSource());
+		booking.setDestination(flightDto.getDestination());
+		booking.setDate(flightDto.getDate());
+		booking.setFare(flightDto.getFare());
 		booking.setCheckinStatus(false);
 
-		Long id = bookingRepository.save(booking).getId();
-		return bookingRepository.findById(id).get();
+		Long bookingId = bookingRepository.save(booking).getId();
+		return bookingRepository.findById(bookingId).orElse(booking);
 	}
 
 	@Override
@@ -75,6 +73,7 @@ public class BookingServiceImpl implements BookingService {
 
 		Booking booking = result.get();
 		bookingRepository.delete(booking);
+		streamBridge.send("booking-deletion", booking.getFlightId());
 	}
 
 	private boolean bookingExists(Long userId, Long flightId) {
