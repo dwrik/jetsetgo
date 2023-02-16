@@ -1,4 +1,4 @@
-package com.dwrik.booking.feignclients;
+package com.dwrik.booking.feignclient;
 
 import com.dwrik.booking.dto.FlightDto;
 import feign.HeaderMap;
