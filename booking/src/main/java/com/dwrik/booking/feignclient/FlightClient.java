@@ -1,5 +1,6 @@
 package com.dwrik.booking.feignclients;
 
+import com.dwrik.booking.dto.FlightDto;
 import feign.HeaderMap;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12,5 +13,5 @@ import java.util.Map;
 public interface FlightClient {
 
 	@RequestMapping(method = RequestMethod.POST, value = "{id}/reserve")
-	Map<String, Object> reserveSeat(@HeaderMap Map<String, Object> headers, @PathVariable Long id);
+	FlightDto reserveSeat(@HeaderMap Map<String, Object> headers, @PathVariable Long id);
 }
