@@ -4,6 +4,7 @@ import com.dwrik.flight.exception.UnknownFlightException;
 import com.dwrik.flight.model.Flight;
 import com.dwrik.flight.repository.FlightRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -39,7 +40,7 @@ public class FlightServiceImpl implements FlightService {
 
 	@Override
 	@Transactional
-	public void reserveSeat(Long id) {
+	public Flight reserveSeat(Long id) {
 		Optional<Flight> result = flightRepository.findById(id);
 
 		if (result.isEmpty()) {
@@ -48,7 +49,7 @@ public class FlightServiceImpl implements FlightService {
 
 		Flight flight = result.get();
 		flight.setRemainingSeats(flight.getRemainingSeats() - 1);
-		flightRepository.save(flight);
+		return flightRepository.save(flight);
 	}
 
 	@Override
