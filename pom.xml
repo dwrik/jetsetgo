@@ -16,5 +16,6 @@
         <module>auth</module>
         <module>flight</module>
         <module>booking</module>
+        <module>checkin</module>
     </modules>
 </project>
