@@ -35,7 +35,7 @@ public class FlightControllerAdvisor {
 	public Map<String, Object> handleUpdateException(RuntimeException e) {
 		return Map.of(
 				"status", HttpStatus.CONFLICT.value(),
-				"message", "failed to reserve seat"
+				"error", "failed to reserve seat"
 		);
 	}
 }
