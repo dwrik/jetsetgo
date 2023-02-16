@@ -8,7 +8,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
-import java.util.Map;
 
 @RestController
 public class FlightController {
@@ -40,11 +39,7 @@ public class FlightController {
 
 	@PostMapping("/{id}/reserve")
 	@ResponseStatus(HttpStatus.CREATED)
-	public Map<String, Object> reserveSeat(@PathVariable Long id) {
-		flightService.reserveSeat(id);
-		return Map.of(
-				"status", HttpStatus.OK.value(),
-				"message", "seat reserved successfully"
-		);
+	public Flight reserveSeat(@PathVariable Long id) {
+		return flightService.reserveSeat(id);
 	}
 }
