@@ -1,7 +1,10 @@
 package com.dwrik.auth.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.validation.constraints.*;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class UserDto {
 
 	@NotNull
