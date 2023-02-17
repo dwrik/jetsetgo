@@ -10,6 +10,7 @@ import com.dwrik.booking.repository.BookingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Map;
 import java.util.Optional;
@@ -27,17 +28,20 @@ public class BookingServiceImpl implements BookingService {
 	private BookingRepository bookingRepository;
 
 	@Override
+	@Transactional(readOnly = true)
 	public Booking getBookingByBookingIdAndUserId(Long bookingId, Long userId) {
 		return bookingRepository.findByIdAndUserId(bookingId, userId)
 				.orElseThrow(() -> new UnknownBookingException("booking not found"));
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public Iterable<Booking> getAllBookings(Long userId) {
 		return bookingRepository.findByUserId(userId);
 	}
 
 	@Override
+	@Transactional
 	public Booking createNewBooking(String bearerToken, Long userId, BookingDto bookingDto) {
 		if (bookingExists(userId, bookingDto.getFlightId())) {
 			throw new UnableToCreateBookingException("booking already exists");
@@ -59,11 +63,18 @@ public class BookingServiceImpl implements BookingService {
 		booking.setFare(flightDto.getFare());
 		booking.setCheckinStatus(false);
 
-		Long bookingId = bookingRepository.save(booking).getId();
-		return bookingRepository.findById(bookingId).orElse(booking);
+		Booking saved = bookingRepository.save(booking);
+
+		streamBridge.send("booking-confirmation", Map.of(
+				"bookingId", saved.getId(),
+				"totalSeats", flightDto.getTotalSeats()
+		));
+
+		 return bookingRepository.findById(saved.getId()).orElse(saved);
 	}
 
 	@Override
+	@Transactional
 	public void deleteBookingByBookingIdAndUserId(Long bookingId, Long userId) {
 		Optional<Booking> result = bookingRepository.findByIdAndUserId(bookingId, userId);
 
@@ -76,6 +87,7 @@ public class BookingServiceImpl implements BookingService {
 		streamBridge.send("booking-deletion", booking.getFlightId());
 	}
 
+	@Transactional(readOnly = true)
 	private boolean bookingExists(Long userId, Long flightId) {
 		return bookingRepository.findByUserIdAndFlightId(userId, flightId).isPresent();
 	}
