@@ -61,12 +61,13 @@ public class BookingServiceImpl implements BookingService {
 		booking.setDestination(flightDto.getDestination());
 		booking.setDate(flightDto.getDate());
 		booking.setFare(flightDto.getFare());
-		booking.setCheckinStatus(false);
+		booking.setCheckinStatus(Boolean.FALSE);
 
 		Booking saved = bookingRepository.save(booking);
 
 		streamBridge.send("booking-confirmation", Map.of(
 				"bookingId", saved.getId(),
+				"flightId", saved.getFlightId(),
 				"totalSeats", flightDto.getTotalSeats()
 		));
 
