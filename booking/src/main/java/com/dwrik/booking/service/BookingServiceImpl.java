@@ -1,6 +1,7 @@
 package com.dwrik.booking.service;
 
 import com.dwrik.booking.dto.BookingDto;
+import com.dwrik.booking.dto.CheckinDto;
 import com.dwrik.booking.dto.FlightDto;
 import com.dwrik.booking.exception.UnableToCreateBookingException;
 import com.dwrik.booking.exception.UnknownBookingException;
@@ -13,7 +14,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Map;
-import java.util.Optional;
 
 @Service
 public class BookingServiceImpl implements BookingService {
@@ -65,25 +65,30 @@ public class BookingServiceImpl implements BookingService {
 
 		Booking saved = bookingRepository.save(booking);
 
-		streamBridge.send("booking-confirmation", Map.of(
+		streamBridge.send("pending-checkin", Map.of(
 				"bookingId", saved.getId(),
 				"flightId", saved.getFlightId(),
 				"totalSeats", flightDto.getTotalSeats()
 		));
 
-		 return bookingRepository.findById(saved.getId()).orElse(saved);
+		return bookingRepository.findById(saved.getId()).orElse(saved);
+	}
+
+	@Override
+	public Booking updateCheckinStatus(CheckinDto checkinDto) {
+		Booking booking = bookingRepository.findById(checkinDto.getBookingId())
+				.orElseThrow(() -> new UnknownBookingException("booking not found"));
+
+		booking.setCheckinStatus(checkinDto.getCheckinStatus());
+		return bookingRepository.save(booking);
 	}
 
 	@Override
 	@Transactional
 	public void deleteBookingByBookingIdAndUserId(Long bookingId, Long userId) {
-		Optional<Booking> result = bookingRepository.findByIdAndUserId(bookingId, userId);
+		Booking booking = bookingRepository.findByIdAndUserId(bookingId, userId)
+				.orElseThrow(() -> new UnknownBookingException("booking not found"));
 
-		if (result.isEmpty()) {
-			throw new UnknownBookingException("booking not found");
-		}
-
-		Booking booking = result.get();
 		bookingRepository.delete(booking);
 		streamBridge.send("booking-deletion", booking.getFlightId());
 	}
