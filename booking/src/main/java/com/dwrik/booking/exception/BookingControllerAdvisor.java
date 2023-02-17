@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import javax.validation.ConstraintViolationException;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -39,6 +41,15 @@ public class BookingControllerAdvisor {
 		return Map.of(
 				"status", HttpStatus.BAD_REQUEST.value(),
 				"error", "failed to get seat confirmation"
+		);
+	}
+
+	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+	@ExceptionHandler({ConstraintViolationException.class, SQLException.class})
+	public Map<String, Object> handleCreateOrDeleteException(RuntimeException e) {
+		return Map.of(
+				"status", HttpStatus.INTERNAL_SERVER_ERROR.value(),
+				"error", "something went wrong"
 		);
 	}
 }
