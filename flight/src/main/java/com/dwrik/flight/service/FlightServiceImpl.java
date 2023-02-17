@@ -5,8 +5,8 @@ import com.dwrik.flight.model.Flight;
 import com.dwrik.flight.repository.FlightRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
 import java.util.Date;
 import java.util.Optional;
 
@@ -17,11 +17,13 @@ public class FlightServiceImpl implements FlightService {
 	private FlightRepository flightRepository;
 
 	@Override
+	@Transactional(readOnly = true)
 	public Iterable<Flight> getAllFlights() {
 		return flightRepository.findAll();
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public Flight getFlightById(Long id) {
 		Optional<Flight> result = flightRepository.findById(id);
 
@@ -33,6 +35,7 @@ public class FlightServiceImpl implements FlightService {
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public Iterable<Flight> getFlightsUsingSourceAndDestinationAndDate(String source, String destination, Date date) {
 		return flightRepository.findBySourceAndDestinationAndDate(source, destination, date);
 	}
