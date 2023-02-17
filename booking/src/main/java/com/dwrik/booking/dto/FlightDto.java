@@ -34,6 +34,11 @@ public class FlightDto {
 	@Max(value = 100000)
 	private Integer fare;
 
+	@NotNull
+	@Max(value = 150, message = "a flight cannot have more than 150 seats")
+	@Min(value = 0, message = "a flight cannot have negative remaining seats")
+	private Integer totalSeats;
+
 	public FlightDto() {
 	}
 
@@ -75,5 +80,13 @@ public class FlightDto {
 
 	public void setFare(Integer fare) {
 		this.fare = fare;
+	}
+
+	public Integer getTotalSeats() {
+		return totalSeats;
+	}
+
+	public void setTotalSeats(Integer totalSeats) {
+		this.totalSeats = totalSeats;
 	}
 }
