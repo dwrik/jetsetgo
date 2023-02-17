@@ -55,21 +55,6 @@ public class Booking {
 	public Booking() {
 	}
 
-	public Booking(Long id, Long userId, Long flightId, String firstName, String lastName, String flightNumber, String source, String destination, Date date, Integer fare, Integer seatNumber, Boolean checkinStatus) {
-		this.id = id;
-		this.userId = userId;
-		this.flightId = flightId;
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.flightNumber = flightNumber;
-		this.source = source;
-		this.destination = destination;
-		this.date = date;
-		this.fare = fare;
-		this.seatNumber = seatNumber;
-		this.checkinStatus = checkinStatus;
-	}
-
 	public Long getId() {
 		return id;
 	}
