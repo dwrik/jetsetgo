@@ -31,13 +31,14 @@ public class CheckinServiceImpl implements CheckinService {
 	@Transactional
 	public Checkin createNewCheckin(Long bookingId, Long userId) {
 		PendingCheckin pendingCheckin = pendingCheckinRepository.findByBookingIdAndUserId(bookingId, userId)
-				.orElseThrow(() -> new UnableToCheckinException("booking not found"));
+				.orElseThrow(() -> new UnableToCheckinException("booking not found or already checked in"));
 
 		int seatNumber = generateSeatNumber(pendingCheckin);
 
 		Checkin checkin = new Checkin();
-		checkin.setBookingId(bookingId);
 		checkin.setSeatNumber(seatNumber);
+		checkin.setFlightId(pendingCheckin.getFlightId());
+		checkin.setBookingId(pendingCheckin.getBookingId());
 		checkin.setCheckinStatus(Boolean.TRUE);
 
 		Checkin saved = checkinRepository.save(checkin);
@@ -45,7 +46,8 @@ public class CheckinServiceImpl implements CheckinService {
 
 		streamBridge.send("checkin-update", Map.of(
 				"bookingId", bookingId,
-				"userId", userId
+				"userId", userId,
+				"seatNumber", seatNumber
 		));
 
 		return saved;
