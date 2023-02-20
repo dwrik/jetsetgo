@@ -15,7 +15,7 @@ public class FlightConfig {
 
 	@Bean
 	public Consumer<Long> onFlightIdReceive() {
-		return (id) -> {
+		return id -> {
 			flightService.vacateSeat(id);
 		};
 	}
