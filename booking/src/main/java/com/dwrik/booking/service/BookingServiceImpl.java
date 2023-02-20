@@ -72,15 +72,17 @@ public class BookingServiceImpl implements BookingService {
 				"totalSeats", flightDto.getTotalSeats()
 		));
 
-		return bookingRepository.findById(saved.getId()).orElse(saved);
+		return bookingRepository.findById(saved.getId()).get();
 	}
 
 	@Override
 	public Booking updateCheckinStatus(CheckinDto checkinDto) {
-		Booking booking = bookingRepository.findById(checkinDto.getBookingId())
+		Booking booking = bookingRepository.findByIdAndUserId(checkinDto.getBookingId(), checkinDto.getUserId())
 				.orElseThrow(() -> new UnknownBookingException("booking not found"));
 
-		booking.setCheckinStatus(checkinDto.getCheckinStatus());
+		booking.setCheckinStatus(Boolean.TRUE);
+		booking.setSeatNumber(checkinDto.getSeatNumber());
+
 		return bookingRepository.save(booking);
 	}
 
