@@ -67,6 +67,7 @@ public class BookingServiceImpl implements BookingService {
 
 		streamBridge.send("pending-checkin", Map.of(
 				"bookingId", saved.getId(),
+				"userId", saved.getUserId(),
 				"flightId", saved.getFlightId(),
 				"totalSeats", flightDto.getTotalSeats()
 		));
