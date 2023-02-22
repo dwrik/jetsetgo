@@ -93,7 +93,7 @@ public class BookingServiceImpl implements BookingService {
 				.orElseThrow(() -> new UnknownBookingException("booking not found"));
 
 		bookingRepository.delete(booking);
-		streamBridge.send("booking-deletion", booking.getFlightId());
+		streamBridge.send("booking-deletion", bookingId);
 	}
 
 	@Transactional(readOnly = true)
