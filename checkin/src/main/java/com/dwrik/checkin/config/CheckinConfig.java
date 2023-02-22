@@ -1,5 +1,6 @@
 package com.dwrik.checkin.config;
 
+import com.dwrik.checkin.dto.DeleteDto;
 import com.dwrik.checkin.model.PendingCheckin;
 import com.dwrik.checkin.service.CheckinService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,9 +23,9 @@ public class CheckinConfig {
 	}
 
 	@Bean
-	Consumer<Long> onBookingIdReceive() {
-		return bookingId -> {
-			checkinService.deleteExistingCheckinOrPendingChecking(bookingId);
+	Consumer<DeleteDto> onBookingIdReceive() {
+		return deleteDto -> {
+			checkinService.deleteExistingCheckinOrPendingChecking(deleteDto.getBookingId());
 		};
 	}
 }
