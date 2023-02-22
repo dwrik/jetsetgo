@@ -92,8 +92,13 @@ public class BookingServiceImpl implements BookingService {
 		Booking booking = bookingRepository.findByIdAndUserId(bookingId, userId)
 				.orElseThrow(() -> new UnknownBookingException("booking not found"));
 
+		Long flightId = booking.getFlightId();
 		bookingRepository.delete(booking);
-		streamBridge.send("booking-deletion", bookingId);
+
+		streamBridge.send("booking-deletion", Map.of(
+				"flightId", flightId,
+				"bookingId", bookingId
+		));
 	}
 
 	@Transactional(readOnly = true)
