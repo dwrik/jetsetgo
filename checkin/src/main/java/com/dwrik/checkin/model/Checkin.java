@@ -18,7 +18,6 @@ public class Checkin {
 	@NotNull
 	private Long flightId;
 
-	@Column(unique = true)
 	@Max(value = 150, message = "a flight cannot have more than 150 seats")
 	@Min(value = 1, message = "a flight cannot have negative remaining seats")
 	private Integer seatNumber;
