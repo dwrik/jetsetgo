@@ -26,7 +26,7 @@ public class CheckinControllerAdvisor {
 	public Map<String, Object> handleCheckinCreationException(RuntimeException e) {
 		return Map.of(
 				"status", HttpStatus.INTERNAL_SERVER_ERROR.value(),
-				"error", "something went wrong"
+				"error", e.getMessage()
 		);
 	}
 }
