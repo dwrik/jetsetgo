@@ -11,12 +11,16 @@ The API allows users to:
 - book seats, fetch bookings and delete bookings
 - checkin
 
+## Documentation
+
+Postman generated API Documentation can be found [here](https://documenter.getpostman.com/view/25773831/2s93CSoWPA).
+
 ## Services
 
 The project consists of 7 different services that interact with each other using internal REST calls or Messaging. Each service handles the responsibilities of it's own domain. Here is the detailed breakdown for each service:
 
 | Service | Responsibility                                                   |
-|:------- |:--------------                                                   |
+|:------- |:---------------------------------------------------------------- |
 | Eureka  | Service registration and discovery                               |
 | Gateway | Routing and Authentication                                       |
 | Config  | Hosts configuration properties for each of the services          |
