@@ -1,8 +1,8 @@
-# Flight Booking System API
+# JetSetGo API
 
 ## Overview
 
-Flight Booking System is a Spring based microservices project using technologies like Spring Cloud (Eureka, Config, Gateway, Stream), Spring Data JPA, JWT etc. among other technologies. It simulates the backend of a Flight Booking System and was built with the primary focus of implementing a full fledged microservices architecture.
+JetSetGo is a Spring based microservices project using technologies like Spring Cloud (Eureka, Config, Gateway, Stream), Spring Data JPA, JWT etc. among other technologies. It simulates the backend of a flight booking system and was built with the primary focus of implementing a full fledged microservices architecture.
 
 The API allows users to:
 
@@ -31,7 +31,7 @@ The project consists of 7 different services that interact with each other using
 
 ## Messaging
 
-The application uses Spring Cloud Stream along with RabbitMQ for messaging. The following are the message flows involved in the application:
+The application uses Spring Cloud Stream along with RabbitMQ for messaging. The following message flows are used in the application:
 
 - Checkin subscribes to Booking for new bookings that are yet to checkin
 - Booking subscribes to Checkin for updates to checkin status & seat number
@@ -41,6 +41,7 @@ The application uses Spring Cloud Stream along with RabbitMQ for messaging. The 
 
 - Dockerizing the application, including the database and message binder.
 - Deploying the application to the web.
+- Maybe use Kafka instead of RabbitMQ.
 
 ## Related Links
 
