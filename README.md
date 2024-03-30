@@ -45,5 +45,5 @@ The application uses Spring Cloud Stream along with RabbitMQ for messaging. The 
 
 ## Related Links
 
-- Flight Booking System Next.js based frontend can be found [here](https://github.com/dwrik/flight-booking-system-frontend).
-- Flight Booking System Config repository can be found [here](https://github.com/dwrik/flight-booking-system-config).
+- JetSetGo frontend built with Next.js can be found [here](https://github.com/dwrik/jetsetgo-frontend).
+- JetSetGo config repository can be found [here](https://github.com/dwrik/flight-booking-system-config).
